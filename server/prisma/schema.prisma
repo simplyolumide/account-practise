@@ -1,0 +1,30 @@
+datasource postgres {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  accounts  Account[]
+  createdAt DateTime  @default(now())
+  firstName String?
+  id        String    @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     String[]
+  updatedAt DateTime  @updatedAt
+  username  String    @unique
+}
+
+model Account {
+  accountName   String?
+  accountNumber Int
+  createdAt     DateTime @default(now())
+  dateOfBirth   User?    @relation(fields: [dateOfBirthId], references: [id])
+  dateOfBirthId String?
+  id            String   @id @default(cuid())
+  updatedAt     DateTime @updatedAt
+}
